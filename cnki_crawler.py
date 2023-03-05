@@ -1,6 +1,7 @@
 import os
 import re
 import time
+import csv
 
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
@@ -10,7 +11,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from tqdm import tqdm
 
-#todo:加上csv功能，每次爬取指定页数功能,保存requirements.txt`
+#todo:每次爬取指定页数功能,保存requirements.txt`
 
 # 搜索关键字
 KEYWORD = "人工智能"
@@ -93,7 +94,6 @@ def StartSpider(web):
                 except:
                     title = "无标题"        
                 item['title'] = title
-                print(title)
                 
                 #抓取论文链接
                 try:
@@ -101,14 +101,13 @@ def StartSpider(web):
                 except:
                     link = ''
                 item['link'] = link
-                print(link)
+
                 #抓取发表时间
                 try:
                     date = tr.find_element(By.XPATH, "./td[@class='date']").text
                 except:
                     date = ''
                 item['date'] = date
-                print(date)
 
                 # 进入详情
                 SwitchToDetailWindow(web, link)
@@ -119,7 +118,6 @@ def StartSpider(web):
                 except:
                     abstract = "无摘要"
                 item['abstract'] = abstract
-                print(abstract)
 
                 #抓取关键字
                 try:
@@ -132,7 +130,7 @@ def StartSpider(web):
                 except:
                     keywords_list = ["无关键词"]
                 item['keywords_list'] = keywords_list
-                print(keywords_list)
+
                 #抓取作者
                 try:
                     author_element = web.find_element(By.ID, 'authorpart')
@@ -140,7 +138,6 @@ def StartSpider(web):
                     author_names_list = []
                     for element in author_elements_list:
                         author_names_list.append(element.text)
-                    print(author_names_list)
                 except:
                     print("grab author failed")
 
@@ -171,19 +168,26 @@ def StartSpider(web):
                 item['author_department_dict'] = author_department_dict
                 print(item)
 
+                # 打开 CSV 文件，使用 utf-8-sig 编码以支持中文
+                csv_filename = 'Data.csv'
+                # check if the CSV file exists
+                if not os.path.isfile(csv_filename):
+                    with open(csv_filename, 'w', newline='', encoding='utf-8-sig') as f:
+                        writer = csv.writer(f)
+                        # 写入标题行
+                        writer.writerow(['title', 'author', 'department', 'keywords', 'abstract', 'published_date', 'url'])
+                # append data to the CSV file 
+                with open(csv_filename, 'a', newline='', encoding='utf-8-sig') as f:
+                    writer = csv.writer(f)
+                    # 写入数据行
+                    # 遍历作者字典，获取每个作者的名称和单位
+                    for author, department in author_department_dict.items():
+                        keywords_str = "|".join(keywords_list)
+                        writer.writerow([title, author, department, keywords_str, abstract, date, link])
 
-                #如果标题中存在/则用汉字替换
-                # r = r"[.!+-=——,$%^，,。？?、~@#￥%……&*《》<>「」{}【】()/\\\[\]'\"]"
-                # title_copy = re.sub(r, '', title)
-                # # 写入爬取信息
-                # try:
-                #     with open(file_path + '/{0}.txt'.format(title_copy), 'w') as f:
-                #         f.write(item)
-                # except:
-                #     print('文件名称Invalid !')
-                print(len(web.window_handles))    
                 SwitchToSearchResultWindow(web,search_results_window_handle)
                 print('back',len(web.window_handles))
+
             #本页抓取完毕，点击下一页
             if HasNextPage(web) == True:
                 web.find_element(By.ID, 'PageNext').click()

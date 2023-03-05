@@ -21,7 +21,7 @@ To use this crawler, you need to have the following installed on your system:
 1. Navigate to the project directory: `cd cnki-crawler`
 2. Run the script: `python cnki_crawler.py`
 3. Enter the search keyword when prompted.
-4. The script will generate a CSV file with the extracted data.(unfinished)
+4. The script will generate a CSV file with the extracted data.
 
 ## Output
 
