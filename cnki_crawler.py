@@ -11,7 +11,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from tqdm import tqdm
 
-#todo:每次爬取指定页数功能,保存requirements.txt`
+#todo:保存requirements.txt`
 
 # 搜索关键字
 KEYWORD = "人工智能"
@@ -54,27 +54,25 @@ def SwitchToSearchResultWindow(web, window_handle):
         print("switch to search result window failed")
 
 # 爬取数据
-def StartSpider(web):
-    global KEYWORD
-    # KEYWORD = "人工智能"
-    KEYWORD = input('请输入索引关键字：')
+def StartSpider(web, keyword, grab_pages_number = 3, continue_last_grab = False, continue_search_result_page_number = 0):
 
-    file_path = './Data/'+KEYWORD
-    if not os.path.exists(file_path):
-        os.mkdir(file_path)
-    WaitForFive()
-    try:
-        #主页搜索
-        web.find_element(By.ID,"txt_SearchText").send_keys(KEYWORD,Keys.ENTER)
-        
-    except:
-        #非主页搜索
-        web.find_element(By.ID,'txt_search').clear()
-        web.find_element(By.ID,'txt_search').send_keys(KEYWORD,Keys.ENTER)
+    page_count = continue_search_result_page_number
+
+    if continue_last_grab == False:
+        #重新从头抓取
+        global KEYWORD
+        KEYWORD = keyword
+        WaitForFive()
+        try:
+            #主页搜索
+            web.find_element(By.ID,"txt_SearchText").send_keys(KEYWORD,Keys.ENTER)
+            
+        except:
+            #非主页搜索
+            web.find_element(By.ID,'txt_search').clear()
+            web.find_element(By.ID,'txt_search').send_keys(KEYWORD,Keys.ENTER)
     
-    # while循环实现翻页
-    page_count = 0
-    while True:
+    for grab_step in range (0, grab_pages_number):
         try:
             page_count += 1
             print(f'{KEYWORD} : 正在读取第{page_count}页!')
@@ -227,4 +225,5 @@ if __name__ == '__main__':
     url = 'https://www.cnki.net/'
     web = Chrome(options=opt)
     web.get(url)
-    StartSpider(web)
+    StartSpider(web,"人工智能",1)
+    StartSpider(web,"人工智能",1,True,1)

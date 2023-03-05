@@ -1,6 +1,6 @@
 # CNKI Crawler
 
-This is a Python-based crawler for CNKI (China National Knowledge Infrastructure) that utilizes Selenium to extract a paper's title, link, date, abstract, keywords, and generates a corresponding author-department dictionary. 
+This is a Python-based crawler for CNKI (China National Knowledge Infrastructure) that utilizes Selenium to extract a paper's title, link, date, abstract, keywords, and generates a corresponding author-department dictionary. Supports setting the pages in a grab and continuing previous grab.
 
 ## Requirements
 
@@ -22,6 +22,7 @@ To use this crawler, you need to have the following installed on your system:
 2. Run the script: `python cnki_crawler.py`
 3. Enter the search keyword when prompted.
 4. The script will generate a CSV file with the extracted data.
+5. Supports setting the pages in a grab and continuing previous grab. Check the API and U will understand.
 
 ## Output
 
@@ -34,6 +35,7 @@ The output of this crawler will be a CSV file with the following columns:
 - Keywords
 - Corresponding Author
 - Department
+![image info](csv.png)
 
 ## Contributing
 
