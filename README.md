@@ -12,7 +12,7 @@ To use this crawler, you need to have the following installed on your system:
 
 ## Installation
 
-1. Clone this repository: `git clone https://github.com/your_username/cnki-crawler.git`
+1. Clone this repository: `git clone https://github.com/thousandyoung/cnki-crawler.git`
 2. Navigate to the project directory: `cd cnki-crawler`
 3. Install the required packages: `pip install -r requirements.txt`
 
