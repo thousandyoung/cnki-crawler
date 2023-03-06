@@ -11,8 +11,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from tqdm import tqdm
 
-#todo:保存requirements.txt`
-
 # 搜索关键字
 KEYWORD = "人工智能"
 

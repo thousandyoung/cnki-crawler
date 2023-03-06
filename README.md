@@ -1,4 +1,4 @@
-# CNKI Crawler
+# CNKI Crawler 知网爬虫
 
 This is a Python-based crawler for CNKI (China National Knowledge Infrastructure) that utilizes Selenium to extract a paper's title, link, date, abstract, keywords, and generates a corresponding author-department dictionary. Supports setting the pages in a grab and continuing previous grab.
 
@@ -14,7 +14,7 @@ To use this crawler, you need to have the following installed on your system:
 
 1. Clone this repository: `git clone https://github.com/thousandyoung/cnki-crawler.git`
 2. Navigate to the project directory: `cd cnki-crawler`
-3. Install the required packages: `pip install -r requirements.txt`
+3. Install the required packages: `conda create --name myenv --file requirements.txt`
 
 ## Usage
 
