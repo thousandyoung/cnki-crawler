@@ -171,7 +171,7 @@ def StartSpider(web, keyword, grab_pages_number = 3, continue_last_grab = False,
                     with open(csv_filename, 'w', newline='', encoding='utf-8-sig') as f:
                         writer = csv.writer(f)
                         # 写入标题行
-                        writer.writerow(['title', 'author', 'department', 'keywords', 'abstract', 'published_date', 'url', 'retrieve_time'])
+                        writer.writerow(['title', 'author', 'department', 'keywords', 'abstract', 'published_date', 'url', 'retrieve_date'])
                 # append data to the CSV file 
                 with open(csv_filename, 'a', newline='', encoding='utf-8-sig') as f:
                     writer = csv.writer(f)
