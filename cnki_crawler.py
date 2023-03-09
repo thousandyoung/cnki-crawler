@@ -10,15 +10,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from tqdm import tqdm
-
-# 搜索关键字
-KEYWORD = "人工智能"
+from datetime import datetime
 
 def WaitForFive():
     time.sleep(5)
-
-def WaitForTen():
-    time.sleep(10)
 
 # 判断是否存在下一页
 def HasNextPage(web):
@@ -47,7 +42,7 @@ def SwitchToSearchResultWindow(web, window_handle):
         web.close()
         WaitForFive()
         web.switch_to.window(window_handle)
-        WaitForTen()
+        WaitForFive()
     except:
         print("switch to search result window failed")
 
@@ -104,6 +99,11 @@ def StartSpider(web, keyword, grab_pages_number = 3, continue_last_grab = False,
                 except:
                     date = ''
                 item['date'] = date
+
+                #记录爬取时间
+                now = datetime.now() # 获取当前时间
+                retrieve_time = now.strftime("%Y-%m-%d %H:%M:%S") # 将时间格式化为字符串
+                item['retrieve_time'] = retrieve_time
 
                 # 进入详情
                 SwitchToDetailWindow(web, link)
@@ -171,7 +171,7 @@ def StartSpider(web, keyword, grab_pages_number = 3, continue_last_grab = False,
                     with open(csv_filename, 'w', newline='', encoding='utf-8-sig') as f:
                         writer = csv.writer(f)
                         # 写入标题行
-                        writer.writerow(['title', 'author', 'department', 'keywords', 'abstract', 'published_date', 'url'])
+                        writer.writerow(['title', 'author', 'department', 'keywords', 'abstract', 'published_date', 'url', 'retrieve_time'])
                 # append data to the CSV file 
                 with open(csv_filename, 'a', newline='', encoding='utf-8-sig') as f:
                     writer = csv.writer(f)
@@ -179,7 +179,7 @@ def StartSpider(web, keyword, grab_pages_number = 3, continue_last_grab = False,
                     # 遍历作者字典，获取每个作者的名称和单位
                     for author, department in author_department_dict.items():
                         keywords_str = "|".join(keywords_list)
-                        writer.writerow([title, author, department, keywords_str, abstract, date, link])
+                        writer.writerow([title, author, department, keywords_str, abstract, date, link, retrieve_time])
 
                 SwitchToSearchResultWindow(web,search_results_window_handle)
                 print('back',len(web.window_handles))
@@ -187,7 +187,7 @@ def StartSpider(web, keyword, grab_pages_number = 3, continue_last_grab = False,
             #本页抓取完毕，点击下一页
             if HasNextPage(web) == True:
                 web.find_element(By.ID, 'PageNext').click()
-                WaitForTen()
+                WaitForFive()
                 search_results_window_handle = web.current_window_handle
 
             else:
